@@ -25,13 +25,13 @@ index is random tussen 0 en aantal lines
 station is index in bestand
 sluit stations.txt
 
-##### Sla de gegevens op in csv bestand, mits deze bestaat
-gegevens is een nieuwe lijst van de 4 gegevens
+##### Sla de reviews op in csv bestand, mits deze bestaat
+reviews is een nieuwe lijst van de 4 gegevens
 
-als gegevens.csv niet bestaat maak een nieuwe aan
-open gegevens.csv
-schrijf gegevens op nieuwe regel
-sluit gegevens.csv
+als reviews.csv niet bestaat maak een nieuwe aan
+open reviews.csv
+schrijf reviews op nieuwe regel
+sluit reviews.csv
 
 ##### Beeindigen programma
 zeg bedankt etc...
