@@ -12,26 +12,26 @@ bestaat maken we er een, en als ie wel bestaat voegen we een nieuwe row toe.
 ## Pseudocode
 
 ##### Vraag de reiziger eerst om zijn gegevens
-vraag om bericht (max 140 karakters)
-vraag om naam
+`vraag om bericht (max 140 karakters)`  
+`vraag om naam`
 
-als naam is niet ingevuld dan naam is anoniem
+`als naam is niet ingevuld dan naam is anoniem`
 
 ##### Geef automatisch extra gegevens door
-datum is huidige datum en tijd
+`datum is huidige datum en tijd`
 
-open stations.txt
-index is random tussen 0 en aantal lines
-station is index in bestand
-sluit stations.txt
+`open stations.txt`  
+`index is random tussen 0 en aantal lines`  
+`station is index in bestand`  
+`sluit stations.txt`
 
 ##### Sla de reviews op in csv bestand, mits deze bestaat
-reviews is een nieuwe lijst van de 4 gegevens
+`reviews is een nieuwe lijst van de 4 gegevens`
 
-als reviews.csv niet bestaat maak een nieuwe aan
-open reviews.csv
-schrijf reviews op nieuwe regel
-sluit reviews.csv
+`als reviews.csv niet bestaat maak een nieuwe aan`  
+`open reviews.csv`  
+`schrijf reviews op nieuwe regel`  
+`sluit reviews.csv`
 
 ##### Beeindigen programma
-zeg bedankt etc...
+`zeg bedankt etc...`
