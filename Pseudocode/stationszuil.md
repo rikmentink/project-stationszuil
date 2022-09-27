@@ -9,7 +9,7 @@ willekeurig station uit een lijst (stations.txt).
 Deze gegevens moeten we op een rijtje zetten en opslaan in een .csv bestand. Wanneer deze niet
 bestaat maken we er een, en als ie wel bestaat voegen we een nieuwe row toe.
 
-# Pseudocode
+## Pseudocode
 
 ##### Vraag de reiziger eerst om zijn gegevens
 vraag om bericht (max 140 karakters)
