@@ -1,8 +1,7 @@
+from datetime import datetime as dt
 import csv
-import locale
 import os
 import random
-import time
 
 """
 Deze module is module 1 waarin reizigers hun review kunnen achterlaten.
@@ -45,29 +44,17 @@ if len(naam.strip()) == 0:
 """
 Haal de huidige datum op met juiste format uit Nederland
 """
-locale.setlocale(locale.LC_TIME, "nl_NL")
-datum = time.strftime('%A %d %B %Y, %H:%M:%S').capitalize()
+datum = dt.now()
 
 
 """
-Lees stations.txt uit en zet stations in een list.
+Lees stations.txt uit, en kies een random station hieruit.
 """
-with open('stations.txt', 'r') as bestand:
-    lines = bestand.readlines()
-    stations = []
+with open('stations.txt', 'r') as file:
+    stations = file.read().splitlines()
 
-    # Stript bij elk station de new line characters
-    for line in lines:
-        stations.append(line.replace('\n', ''))
-
-    bestand.close()
-
-
-"""
-Wijs een random station aan uit de lijst
-"""
-index = random.randint(0, len(stations))
-station = stations[index]
+    index = random.randint(0, len(stations))
+    station = stations[index]
 
 
 """
@@ -76,17 +63,12 @@ bestaat, anders maken we een nieuw bestand aan.
 """
 review = [bericht, naam, station, datum]
 
-if not os.path.exists('reviews.csv'):
-    method = 'x'
-else:
-    method = 'a'
-
 try:
-    with open('reviews.csv', method) as file:
+    with open('reviews.csv', 'a') as file:
         writer = csv.writer(file)
         writer.writerow(review)
-        file.close()
     print('Gelukt! Bedankt voor uw bericht.')
-except Exception as e:
+except OSError as e:
     # Vang errors op bij het schrijven
     print('Er is iets misgegaan, onze excuses voor het ongemak.')
+    print(f'Error: {e}')

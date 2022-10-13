@@ -129,6 +129,6 @@ dmypy.json
 .pyre/
 
 # Custom
-.idea/
-reviews.csv
+/.idea
 /Pipfile
+/reviews.csv

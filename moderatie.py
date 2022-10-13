@@ -1,8 +1,7 @@
 import csv
 import cutie
-import locale
 import psycopg2
-import time
+from datetime import datetime as dt
 
 """
 In deze module kunnen reviews die zijn achtergelaten in module 1 worden goed of afgekeurd. De goedgekeurde berichten zullen bij module 3 worden weergegeven.
@@ -12,6 +11,8 @@ Het .csv bestand vol met alle reviews wordt uitgelezen, en de reviews die nog ni
 Deze module slaat vervolgens de review op in een PostgreSQL database. Ook voegt hij een beoordeling toe aan de database, waar de beoordeling in staat, de datum en tijd, gegevens van de moderator en een foreign key van de review.
 
 Zodra de gegevens naar de database geschreven zijn wordt het .csv bestand geleegd.
+
+LET OP: Dit bestand moet via de terminal worden geopend (python moderatie.py).
 """
 
 """
@@ -103,8 +104,7 @@ for review in reviews:
     index = cutie.select(beoordelingen, selected_index=1)
 
     # Verzamel datum en stel beoordeling samen
-    locale.setlocale(locale.LC_TIME, "nl_NL")
-    beoordeling_datum = time.strftime('%A %d %B %Y, %H:%M:%S').capitalize()
+    beoordeling_datum = dt.now()
     beoordeling = [index, beoordeling_datum, review[0]]
 
     # Schrijf naar database en
