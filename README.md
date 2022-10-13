@@ -11,31 +11,31 @@ Dit project vereist naast code ook pseudocode, welke in .md bestanden opgeslagen
 Door middel van deze checklist is exact bij te houden hoe ver ik alles heb afgerond:
 <details>
   <summary>Pseudocode</summary>
-  <p>- [x] Module 1</p>
-  <p>- [x] Module 2</p>
-  <p>- [x] Module 3</p>
+  - [x] Module 1
+  - [x] Module 2
+  - [x] Module 3
 </details>
 <details>
   <summary>Module 1: Stationszuil</summary>
-  <p>- [x] Programmeren</p>
-  <p>- [x] Documenteren</p>
-  <p>- [x] Testen</p>
+  - [x] Programmeren
+  - [x] Documenteren
+  - [x] Testen
 </details>
 <details>
   <summary>Module 2: Moderatie</summary>
-  <p>- [x] Programmeren</p>
-  <p>- [x] Documenteren</p>
-  <p>- [x] Testen</p>
+  - [x] Programmeren
+  - [x] Documenteren
+  - [x] Testen
 </details>
 <details>
   <summary>Module 3: Stationshalscherm</summary>
-  <p>- [ ] Programmeren</p>
-  <p>- [ ] Documenteren</p>
-  <p>- [ ] Testen</p>
+  - [ ] Programmeren
+  - [ ] Documenteren
+  - [ ] Testen
 </details>
 <details>
   <summary>Afwerking</summary>
-  <p>- [ ] Afwerken git repository</p>
-  <p>- [ ] Testen van alle modules</p>
-  <p>- [ ] Individueel reflectieverslag</p>
+  - [ ] Afwerken git repository
+  - [ ] Testen van alle modules
+  - [ ] Individueel reflectieverslag
 </details>
