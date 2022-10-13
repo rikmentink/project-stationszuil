@@ -22,7 +22,6 @@ with open('reviews.csv', 'r+') as file:
     reader = csv.reader(file, delimiter=',')
     reviews = list(reader)
     file.truncate(0)
-    file.close()
 
 """
 Maak verbinding met de database, controleer of kolom reviews en
@@ -55,6 +54,7 @@ for review in reviews:
         "INSERT INTO reviews(bericht, naam, station, datum) "
         "VALUES(%s, %s, %s, %s)", review
     )
+    db.commit()
 
 print('Klaar!\n')
 
