@@ -1,7 +1,6 @@
-from datetime import datetime as dt
 import csv
-import os
 import random
+from datetime import datetime as dt
 
 """
 Deze module is module 1 waarin reizigers hun review kunnen achterlaten.

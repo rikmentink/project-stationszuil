@@ -18,119 +18,78 @@ handmatig aan en positioneren deze in de GUI.
 """
 
 
-class GUI(Tk):
-    """
-    Class die de root en de verschillende frames beheert.
-    """
+class SelectieScherm:
+    def __init__(self, root):
+        # Maak een container aan voor SelectScherm, waar alle widgets in komen.
+        self.root = root
+        self.root.title('Selecteer station')
+        self.container = Frame(self.root, width=600, height=400)
+        self.container.pack_propagate(0)
+        self.container.pack(fill=BOTH, expand=True)
 
-    def __init__(self, *args, **kwargs):
-        # Initialiseer het Tkinter window
-        Tk.__init__(self, *args, **kwargs)
-        self.title('Test')
-
-        # Maak een container frame en wijs hem toe aan het scherm
-        container = Frame(self, width=1920, height=1080)
-        container.pack(side='top', fill='both', expand=True)
-
-        # Maak een grid aan in het container
-        container.rowconfigure(0, weight=1)
-        container.columnconfigure(0, weight=1)
-
-        # Maak een dictionary met alle frames (verschillende windows).
-        self.frames = {}
-        for frame_class in (InfoScherm, SelectScherm):
-            frame = frame_class(container, self)
-
-            self.frames[frame_class] = frame
-            frame.grid(row=0, column=0, sticky='nsew')
-
-        print(self.frames)
-
-    def show_frame(self, container):
-        frame = self.frames[container]
-        if frame:
-            frame.destroy()
-        frame = self.frames[container]
-        frame.pack()
-
-    station = ''
-
-    def get_stations(self):
-        with open('stations.txt', 'r') as file:
-            stations = file.read().splitlines()
-            self.station = stations[0]
-            return stations
-
-    def get_station(self):
-        if len(self.station) == 0:
-            return self.get_stations()[0]
-        else:
-            return self.station
-
-    def set_station(self, station):
-        print(f'{self.station} wordt {station}')
-        self.station = station
-
-    def submit_station(self):
-        self.show_frame(InfoScherm)
-
-
-class SelectScherm(Frame):
-    def __init__(self, parent, controller):
-        Frame.__init__(self, parent)
-        stations = controller.get_stations()
+        # Initialiseer selectie menu
+        stations = self.get_stations()
         placeholder = StringVar()
         placeholder.set(stations[0])
-
-        # Maak een container aan voor SelectScherm, waar alle widgets in komen.
-        container = Frame(self, width=600, height=400)
-        container.pack_propagate(0)
-        container.pack(fill=BOTH, expand=True)
+        self.selected_station = stations[0]
 
         # Initialiseer widgets
-        title = Label(
-            container,
-            text='Selecteer station',
+        self.title = Label(
+            self.container,
+            text='Selecteer uw station',
             font=('Arial', 20, 'bold')
         )
-        subtitle = Label(
-            container,
+        self.subtitle = Label(
+            self.container,
             text='Selecteer hier het station waarop u zich momenteel bevindt.',
             font=('Arial', 13)
         )
-        select = OptionMenu(
-            container,
+        self.select = OptionMenu(
+            self.container,
             placeholder,
             *stations,
-            command=controller.set_station
+            command=self.set_selected_station
         )
-        submit = Button(
-            container,
+        self.submit = Button(
+            self.container,
             text='Verder',
-            command=controller.submit_station
+            command=self.submit_station
         )
-        title.pack(anchor=CENTER, pady=(100, 0))
-        subtitle.pack(after=title, anchor=CENTER)
-        select.pack(after=subtitle, pady=(30, 0), anchor=CENTER)
-        submit.pack(after=select, anchor=CENTER)
+        self.title.pack(anchor=CENTER, pady=(100, 0))
+        self.subtitle.pack(after=self.title, anchor=CENTER)
+        self.select.pack(after=self.subtitle, pady=(30, 0), anchor=CENTER)
+        self.submit.pack(after=self.select, anchor=CENTER)
 
+    def get_stations(self):
+        with open('stations.txt') as file:
+            return file.read().splitlines()
 
-class InfoScherm(Frame):
-    def __init__(self, parent, controller):
+    def set_selected_station(self, station):
+        self.selected_station = station
+
+    def submit_station(self):
+        self.root.destroy()
+        self.root = Tk()
+        self.app = InfoScherm(self.root, self.selected_station)
+
+class InfoScherm():
+    def __init__(self, root, station):
         """
         Initialiseer alle standaard widgets op het stationsscherm.
-
-        :param parent:
         """
-        Frame.__init__(self, parent)
-        print()
-        title = Label(self, text=f'Info scherm station {controller.get_station()}')
-        title.pack(padx=10, pady=10)
+        self.root = root
+        self.root.title('Stationsinformatie')
+        self.root.geometry('1920x1080')
+        self.station = station
+
+        self.title = Label(self.root, text=f'Info scherm station {self.station}')
+        self.title.pack(padx=10, pady=10)
 
 
 """
 Wanneer het bestand start wordt de functie main() uitgevoerd.
 """
 if __name__ == "__main__":
-    root = GUI()
+    root = Tk()
+    app = SelectieScherm(root)
     root.mainloop()

@@ -209,3 +209,4 @@ fabric.properties
 # Custom
 /Pipfile
 /reviews.csv
+/.idea/
