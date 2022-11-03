@@ -18,6 +18,11 @@ handmatig aan en positioneren deze in de GUI.
 """
 
 
+def get_stations():
+    with open('stations.txt') as file:
+        return file.read().splitlines()
+
+
 class SelectieScherm:
     def __init__(self, root):
         # Maak een container aan voor SelectScherm, waar alle widgets in komen.
@@ -28,7 +33,7 @@ class SelectieScherm:
         self.container.pack(fill=BOTH, expand=True)
 
         # Initialiseer selectie menu
-        stations = self.get_stations()
+        stations = get_stations()
         placeholder = StringVar()
         placeholder.set(stations[0])
         self.selected_station = stations[0]
@@ -60,10 +65,6 @@ class SelectieScherm:
         self.select.pack(after=self.subtitle, pady=(30, 0), anchor=CENTER)
         self.submit.pack(after=self.select, anchor=CENTER)
 
-    def get_stations(self):
-        with open('stations.txt') as file:
-            return file.read().splitlines()
-
     def set_selected_station(self, station):
         self.selected_station = station
 
@@ -72,18 +73,48 @@ class SelectieScherm:
         self.root = Tk()
         self.app = InfoScherm(self.root, self.selected_station)
 
+
 class InfoScherm():
     def __init__(self, root, station):
         """
-        Initialiseer alle standaard widgets op het stationsscherm.
+        Initialiseer het stationsscherm.
         """
         self.root = root
         self.root.title('Stationsinformatie')
         self.root.geometry('1920x1080')
         self.station = station
 
-        self.title = Label(self.root, text=f'Info scherm station {self.station}')
-        self.title.pack(padx=10, pady=10)
+        """
+        Creeer een container met daarin een grid
+        """
+        self.container = Frame(self.root, width=1920, height=1080)
+        self.container.pack_propagate(0)
+        self.container.pack(fill=BOTH, expand=True)
+
+        self.container.columnconfigure(0, weight=1)
+        self.container.columnconfigure(1, weight=1)
+        self.container.columnconfigure(2, weight=1)
+        self.container.rowconfigure(0, weight=1)
+        self.container.rowconfigure(1, weight=3)
+        self.container.rowconfigure(2, weight=3)
+
+        """
+        Maak de bovenste header aan.
+        """
+        self.header = Frame(self.container, width=1920, height=150, background='blue')
+
+        # TODO: Juiste achtergrond fixen voor de header
+        self.header.grid(column=0, row=0, columnspan=5, rowspan=1, sticky=N)
+        self.header.columnconfigure(0, weight=1)
+        self.header.rowconfigure(0, weight=1)
+
+        self.title = Label(
+            self.header,
+            text=f'Welkom op station {self.station}.',
+            font=('Arial', 20, 'bold'),
+            foreground='black'
+        )
+        self.title.grid(column=0, row=0, sticky=CENTER)
 
 
 """
