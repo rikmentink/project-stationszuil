@@ -1,6 +1,6 @@
-import csv
+from datetime import datetime
+import locale
 import random
-from datetime import datetime as dt
 
 """
 Deze module is module 1 waarin reizigers hun review kunnen achterlaten.
@@ -15,8 +15,47 @@ bestaat maken we er een, en als ie wel bestaat voegen we een nieuwe row toe.
 """
 
 
+def promptName():
+    """
+    Vraagt de gebruiker om zijn of haar naam, en als er geen naam is ingevuld
+    wordt deze op Anoniem gezet.
+
+    :return: De naam van de reiziger of Anoniem.
+    """
+    naam = input('Wat is uw naam? (niet verplicht)\n')
+
+    if len(naam.strip()) == 0:
+        naam = 'Anoniem'
+
+    return naam
+
+
+def getCurrentDate():
+    """
+    Functie om de huidige datum en tijd op te halen, voor in de database.
+
+    :return: Huidige datum en tijd.
+    """
+    locale.setlocale(locale.LC_TIME, 'nl_NL')
+    return datetime.strftime(datetime.now(), '%A %-d %B %Y').capitalize()
+
+
+def getRandomStation():
+    """
+    Leest het bestand met alle stations, zet alle stations vervolgens in een
+    lijst en selecteert een random station uit die lijst.
+
+    :return: Een random station uit de lijst met stations.
+    """
+    with open('stations.txt', 'r+') as stations_file:
+        stations = stations_file.read().splitlines()
+        return random.choice(stations)
+
+
 """
-Vraag om bericht, en probeer opnieuw wanneer het bericht te lang is.
+Vraag om bericht, en probeer opnieuw wanneer het bericht te lang is. Als het 
+bericht is goedgekeurd wordt deze in een string samengevat en direct 
+weggeschreven naar het bestand.
 """
 while True:
     bericht = input('Laat hier uw bericht achter (max 140 tekens):\n')
@@ -28,46 +67,9 @@ while True:
         print('Fout: u moet een bericht invullen.')
         continue
     else:
-        break
+        review = f'{bericht},{promptName()},{getRandomStation()},{getCurrentDate()}\n'
 
-
-"""
-Vraag om naam, en zonder input naam Anoniem instellen
-"""
-naam = input('Wat is uw naam? (niet verplicht)\n')
-
-if len(naam.strip()) == 0:
-    naam = 'Anoniem'
-
-
-"""
-Haal de huidige datum op met juiste format uit Nederland
-"""
-datum = dt.now()
-
-
-"""
-Lees stations.txt uit, en kies een random station hieruit.
-"""
-with open('stations.txt', 'r') as file:
-    stations = file.read().splitlines()
-
-    index = random.randint(0, len(stations))
-    station = stations[index]
-
-
-"""
-Vat review samen en sla op in het reviews.csv bestand als deze 
-bestaat, anders maken we een nieuw bestand aan.
-"""
-review = [bericht, naam, station, datum]
-
-try:
-    with open('reviews.csv', 'a') as file:
-        writer = csv.writer(file)
-        writer.writerow(review)
-    print('Gelukt! Bedankt voor uw bericht.')
-except OSError as e:
-    # Vang errors op bij het schrijven
-    print('Er is iets misgegaan, onze excuses voor het ongemak.')
-    print(f'Error: {e}')
+        with open('reviews.csv', 'a+') as reviews_file:
+            reviews_file.write(review)
+            print('Gelukt! Bedankt voor uw bericht.')
+            break
