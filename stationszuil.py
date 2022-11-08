@@ -36,8 +36,7 @@ def getCurrentDate():
 
     :return: Huidige datum en tijd.
     """
-    locale.setlocale(locale.LC_TIME, 'nl_NL')
-    return datetime.strftime(datetime.now(), '%A %-d %B %Y')
+    return datetime.now()
 
 
 def getRandomStation():

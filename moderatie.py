@@ -39,12 +39,12 @@ def createConnection():
         with conn.cursor() as cur:
             cur.execute(
                 "CREATE TABLE IF NOT EXISTS review (id SERIAL PRIMARY KEY, bericht VARCHAR(140) NOT NULL, naam VARCHAR(40) "
-                "NOT NULL, station VARCHAR(30) NOT NULL, datum VARCHAR(40) NOT NULL); "
+                "NOT NULL, station VARCHAR(30) NOT NULL, datum TIMESTAMP NOT NULL); "
     
                 "CREATE TABLE IF NOT EXISTS moderator (email VARCHAR(255) PRIMARY KEY, naam VARCHAR(40) NOT NULL);"
     
                 "CREATE TABLE IF NOT EXISTS beoordeling (review_id INTEGER PRIMARY KEY REFERENCES review, goedgekeurd "
-                "BOOLEAN NOT NULL, datum VARCHAR(40) NOT NULL, moderator_email VARCHAR(255) REFERENCES moderator); "
+                "BOOLEAN NOT NULL, datum TIMESTAMP NOT NULL, moderator_email VARCHAR(255) REFERENCES moderator); "
             )
 
         return conn
