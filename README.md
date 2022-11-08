@@ -23,10 +23,10 @@ Door middel van deze checklist is exact bij te houden hoe ver ik alles heb afger
   - [x] Documenteren
   - [x] Testen
 #### Module 3: Stationshalscherm
-  - [ ] Programmeren
-  - [ ] Documenteren
-  - [ ] Testen
+  - [x] Programmeren
+  - [x] Documenteren
+  - [x] Testen
 #### Afwerking
-  - [ ] Afwerken git repository
-  - [ ] Testen van alle modules
-  - [ ] Individueel reflectieverslag
+  - [x] Afwerken git repository
+  - [x] Testen van alle modules
+  - [x] Individueel reflectieverslag
