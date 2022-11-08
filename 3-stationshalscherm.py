@@ -1,7 +1,10 @@
 import io
 import json
+import locale
+
 import psycopg2
 import requests
+from datetime import datetime as dt
 from PIL import ImageTk, Image as Img
 from tkinter import *
 from urllib.request import urlopen
@@ -77,8 +80,14 @@ def getFaciliteiten(station):
 
 
 def getFaciliteitImage(faciliteit):
+    """
+    Returned de afbeelding van de gegeven faciliteit.
+
+    :param faciliteit: De naam van de faciliteit
+    :return: De bijbehorende afbeelding.
+    """
     image_file = Img.open(f'Icons/{faciliteit}.png')
-    image_file.resize((50, 50))
+    image_file.resize((32, 32))
     return image_file
 
 
@@ -128,13 +137,18 @@ def getRecentReviews(station):
             return reviews
 
 
+def getCurrentDate():
+    locale.setlocale(locale.LC_TIME, 'nl_NL')
+    return dt.strftime(dt.now(), '%A %w %B %Y, %H:%M:%S').capitalize()
+
+
 class SelectieScherm:
     def __init__(self, root):
         # Maak een container aan voor SelectScherm, waar alle widgets in komen.
         self.root = root
         self.root.title('Selecteer station')
         self.container = Frame(self.root, width=400, height=300)
-        self.container.pack_propagate(0)
+        self.container.pack_propagate(False)
         self.container.pack(fill=BOTH, expand=True)
 
         # Initialiseer selectie menu
@@ -196,15 +210,16 @@ class InfoScherm:
         Creeer een container met daarin een grid
         """
         self.container = Frame(self.root)
-        self.container.pack_propagate(0)
+        self.container.pack_propagate(False)
         self.container.pack(fill=BOTH, expand=True)
 
         self.container.columnconfigure(0, weight=1)
         self.container.columnconfigure(1, weight=3)
         self.container.columnconfigure(2, weight=3)
-        self.container.rowconfigure(0, weight=1)
+        self.container.rowconfigure(0, weight=2)
         self.container.rowconfigure(1, weight=3)
         self.container.rowconfigure(2, weight=3)
+        self.container.rowconfigure(3, weight=1)
 
         """
         Maak de bovenste header aan met daarin een titel en rechts het 
@@ -277,10 +292,9 @@ class InfoScherm:
         for faciliteit in soorten_faciliteiten:
             if self.faciliteiten[soorten_faciliteiten.index(faciliteit)]:
                 faciliteit_container = Frame(self.faciliteiten_container)
-                faciliteit_container.grid(row=len(self.faciliteiten_list)+1, column=0, columnspan=2,
-                                          padx=5, pady=5, sticky=W)
+                faciliteit_container.grid(row=len(self.faciliteiten_list)+1, column=0, columnspan=2, pady=5, sticky=W)
 
-                image = ImageTk.PhotoImage(getFaciliteitImage(faciliteit))
+                image = ImageTk.PhotoImage(getFaciliteitImage(faciliteit).resize((50, 50)))
                 faciliteit_image = Label(faciliteit_container, width=50, height=50, image=image)
                 faciliteit_image.image = image
                 faciliteit_image.grid(column=0, row=0)
@@ -338,6 +352,27 @@ class InfoScherm:
             review_naam.grid(row=1, column=0, sticky=W)
 
             self.reviews_list.append(review)
+
+        """
+        Footer met huidige datum en tijd
+        """
+        self.footer = Frame(self.container, width=600, height=50)
+        self.footer.grid(column=0, row=3, columnspan=3, sticky=S, pady=(0, 10))
+
+        self.datum = Label(
+            self.footer,
+            font=('Arial', 14),
+        )
+        self.datum.grid(column=0, row=0, sticky=W)
+
+        def updateTime():
+            """
+            Update iedere seconde de huidige tijd.
+            """
+            self.datum.config(text = getCurrentDate())
+            self.datum.after(1000, updateTime)
+        updateTime()
+
 
 
 """

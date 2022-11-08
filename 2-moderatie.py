@@ -1,5 +1,6 @@
 import csv
 import cutie
+import locale
 import psycopg2
 from datetime import datetime as dt
 
@@ -38,8 +39,8 @@ def createConnection():
     ) as conn:
         with conn.cursor() as cur:
             cur.execute(
-                "CREATE TABLE IF NOT EXISTS review (id SERIAL PRIMARY KEY, bericht VARCHAR(140) NOT NULL, naam VARCHAR(40) "
-                "NOT NULL, station VARCHAR(30) NOT NULL, datum TIMESTAMP NOT NULL); "
+                "CREATE TABLE IF NOT EXISTS review (id SERIAL PRIMARY KEY, bericht VARCHAR(140) NOT NULL, "
+                "naam VARCHAR(40) NOT NULL, station VARCHAR(30) NOT NULL, datum TIMESTAMP NOT NULL); "
     
                 "CREATE TABLE IF NOT EXISTS moderator (email VARCHAR(255) PRIMARY KEY, naam VARCHAR(40) NOT NULL);"
     
@@ -66,20 +67,26 @@ def insertReviews(conn):
 
     :param conn: De database verbinding
     """
-    with open('reviews.csv', 'r+') as reviews_file:
-        reader = csv.reader(reviews_file, delimiter=',')
-        reviews = list(reader)
-        reviews_file.truncate(0)
+    try:
+        with open('reviews.csv', 'r+') as reviews_file:
+            reader = csv.reader(reviews_file, delimiter=',')
+            reviews = list(reader)
+            reviews_file.truncate(0)
 
-        print('Alle reviews importeren in de database...')
-        with conn.cursor() as cur:
-            for review in reviews:
-                cur.execute(
-                    "INSERT INTO review (bericht, naam, station, datum) "
-                    "VALUES (%s, %s, %s, %s)", review
-                )
-            conn.commit()
-            print('Klaar!\n')
+            if len(reviews) > 0:
+                print('Alle reviews importeren in de database...')
+                with conn.cursor() as cur:
+                    for review in reviews:
+                        cur.execute(
+                            "INSERT INTO review (bericht, naam, station, datum) "
+                            "VALUES (%s, %s, %s, %s)", review
+                        )
+                    conn.commit()
+                    print('Klaar!\n')
+            else:
+                print('Geen reviews om te importeren.')
+    except FileNotFoundError:
+        print('Geen reviews om te importeren.')
 
 
 def getReviews(conn):
@@ -178,6 +185,10 @@ while True:
                     break
         break
 
+"""
+Zet de locale op Nederland, voor de juiste datum format
+"""
+locale.setlocale(locale.LC_TIME, 'nl_NL')
 
 """
 Alle reviews worden 1 voor 1 weergegeven, en er wordt aan de moderator 
@@ -189,7 +200,7 @@ antwoorden = ['afgekeurd', 'goedgekeurd']
 
 print('Beoordeel de volgende reviews:\n------------------------------')
 for review in getReviews(conn):
-    print(f'{review[2]} zei op {review[4]} in {review[3]}:\n{review[1]}')
+    print(f'{review[2]} zei op {dt.strftime(review[4], "%w %B %Y, %H:%M:%S")} in {review[3]}:\n{review[1]}')
     index = cutie.select(beoordelingen, selected_index=1)
 
     # Verzamel datum en stel beoordeling samen
